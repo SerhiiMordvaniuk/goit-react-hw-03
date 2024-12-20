@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
@@ -6,7 +6,16 @@ import SearschBox from "./SearchBox/SearschBox";
 import InitialContacts from "./InitialContacts.json";
 
 function App() {
-  const [contactList, setContactList] = useState(InitialContacts);
+  // const [contactList, setContactList] = useState(InitialContacts);
+
+  const [contactList, setContactList] = useState(() => {
+    const localContacts = JSON.parse(localStorage.getItem("contactlist"));
+    if (localContacts !== null) {
+      return localContacts;
+    }
+    return InitialContacts;
+  });
+
   const [filter, setFilter] = useState("");
 
   const addContact = (newContact) => {
@@ -15,11 +24,14 @@ function App() {
     });
   };
   const deleteContact = (id) => {
-    console.log(id);
     setContactList((prev) => {
       return prev.filter((contact) => contact.id !== id);
     });
   };
+
+  useEffect(() => {
+    localStorage.setItem("contactlist", JSON.stringify(contactList));
+  }, [contactList]);
 
   const visibleContacts = contactList.filter((contact) =>
     contact.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())

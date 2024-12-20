@@ -14,7 +14,6 @@ const SearschBox = ({ filter, onSearch }) => {
             name="text"
             className={s.input}
             id={id}
-            // value={filter}
             onChange={(event) => {
               onSearch(event.target.value);
             }}

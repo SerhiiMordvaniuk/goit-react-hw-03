@@ -1,11 +1,23 @@
 import React, { useId } from "react";
 import s from "./ContactForm.module.css";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { nanoid } from "nanoid";
+import * as Yup from "yup";
 
 const initialValues = {
   name: "",
   number: "",
 };
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Має бути мінімум три символи!")
+    .max(50, "Має бутине більше 50 символів!")
+    .required("Це поле має бути заповнено"),
+  number: Yup.string()
+    .min(3, "Має бути мінімум три символи!")
+    .max(50, "Має бутине більше 50 символів!")
+    .required("Це поле має бути заповнено"),
+});
 
 const ContactForm = ({ onAdd }) => {
   const nameId = useId();
@@ -13,17 +25,22 @@ const ContactForm = ({ onAdd }) => {
 
   const handleSubmit = (values, actions) => {
     actions.resetForm();
-    onAdd({ id: Date.now(), name: values.name, number: values.number });
+    onAdd({ id: nanoid(), name: values.name, number: values.number });
   };
 
   return (
     <>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
         <Form className={s.form}>
           <div>
             <label htmlFor={nameId}>
               <span>Name</span>
               <Field type="text" name="name" className={s.input} id={nameId} />
+              <ErrorMessage name="name" component="span" className={s.error} />
             </label>
           </div>
           <div>
@@ -34,6 +51,11 @@ const ContactForm = ({ onAdd }) => {
                 name="number"
                 className={s.input}
                 id={numberId}
+              />
+              <ErrorMessage
+                name="number"
+                component="span"
+                className={s.error}
               />
             </label>
           </div>
