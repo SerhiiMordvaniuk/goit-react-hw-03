@@ -1,24 +1,36 @@
 import { useState } from "react";
 import "./App.css";
-import Contact from "./Contact/Contact";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
 import SearschBox from "./SearchBox/SearschBox";
-
-const contactList = [
-  { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-  { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-  { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-  { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-];
+import InitialContacts from "./InitialContacts.json";
 
 function App() {
+  const [contactList, setContactList] = useState(InitialContacts);
+  const [filter, setFilter] = useState("");
+
+  const addContact = (newContact) => {
+    setContactList((prev) => {
+      return [newContact, ...prev];
+    });
+  };
+  const deleteContact = (id) => {
+    console.log(id);
+    setContactList((prev) => {
+      return prev.filter((contact) => contact.id !== id);
+    });
+  };
+
+  const visibleContacts = contactList.filter((contact) =>
+    contact.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
+  );
+
   return (
     <>
       <h1>Phonebook</h1>
-      <ContactForm />
-      <SearschBox />
-      <ContactList contactList={contactList} />
+      <ContactForm onAdd={addContact} />
+      <SearschBox filter={filter} onSearch={setFilter} />
+      <ContactList contactList={visibleContacts} onDelete={deleteContact} />
     </>
   );
 }
