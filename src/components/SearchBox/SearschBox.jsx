@@ -1,6 +1,5 @@
 import React, { useId } from "react";
 import s from "./SearschBox.module.css";
-import { Field, Form, Formik } from "formik";
 
 const SearschBox = ({ filter, onSearch }) => {
   const id = useId();
@@ -19,7 +18,6 @@ const SearschBox = ({ filter, onSearch }) => {
             }}
           />
         </label>
-        <button type="submitt">Search</button>
       </form>
     </>
   );

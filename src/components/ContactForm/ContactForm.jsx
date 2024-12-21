@@ -11,11 +11,11 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, "Має бути мінімум три символи!")
-    .max(50, "Має бутине більше 50 символів!")
+    .max(50, "Має бути не більше 50 символів!")
     .required("Це поле має бути заповнено"),
   number: Yup.string()
     .min(3, "Має бути мінімум три символи!")
-    .max(50, "Має бутине більше 50 символів!")
+    .max(50, "Має бути не більше 50 символів!")
     .required("Це поле має бути заповнено"),
 });
 
@@ -47,7 +47,7 @@ const ContactForm = ({ onAdd }) => {
             <label htmlFor={numberId}>
               <span>Number</span>
               <Field
-                type="number"
+                type="text"
                 name="number"
                 className={s.input}
                 id={numberId}
